@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Activity, ArrowRight, Shield, Clock, Shuffle, FileText, 
-  User, Calendar, Stethoscope, BarChart, Users, Menu, X, Globe, Bell, Send
+  User, Calendar, Stethoscope, BarChart, Users, Menu, X, Globe, Bell, Send, ArrowLeft, Plus
 } from 'lucide-react';
 import { TRANSLATIONS } from './constants';
 import { Language, Role } from './types';
@@ -180,7 +180,7 @@ function App() {
 
       <main className="flex-1">
         
-        {/* Hero Section */}
+        {/* Hero Section - Removed Reveal for immediate loading */}
         <section className="relative overflow-hidden bg-white pt-16 pb-20 lg:pt-32 lg:pb-36">
            <div className="absolute top-0 right-0 -z-10 opacity-40 translate-x-1/3 -translate-y-1/4">
              <svg width="800" height="800" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
@@ -189,7 +189,7 @@ function App() {
           </div>
           
           <div className="container mx-auto px-4 text-center max-w-5xl">
-            <Reveal>
+            <div>
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 tracking-tight mb-8 leading-[1.1] whitespace-pre-line">
                 {t.hero.title}
               </h1>
@@ -213,7 +213,7 @@ function App() {
                   {t.hero.ctaSecondary}
                 </a>
               </div>
-            </Reveal>
+            </div>
           </div>
         </section>
 
@@ -256,53 +256,93 @@ function App() {
         </section>
 
         {/* Telegram Bot Integration Section */}
-        <section className="py-16 bg-blue-50 border-y border-blue-100 relative overflow-hidden">
+        <section className="py-20 bg-gradient-to-br from-blue-50 to-indigo-50 border-y border-blue-100 relative overflow-hidden">
+           {/* Background decorative elements */}
+           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-200/20 rounded-full blur-3xl -mr-24 -mt-24 pointer-events-none"></div>
+           <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-indigo-200/20 rounded-full blur-3xl -ml-24 -mb-24 pointer-events-none"></div>
+
            <div className="container mx-auto px-4 relative z-10">
              <Reveal>
-               <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12">
-                 <div className="flex-1 text-center md:text-left">
-                   <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-1.5 rounded-full text-sm font-bold mb-6">
-                      <Send className="w-4 h-4" /> Telegram Integration
+               <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20">
+                 {/* Text Content */}
+                 <div className="flex-1 text-center lg:text-left">
+                   <div className="inline-flex items-center gap-2 bg-white border border-blue-100 text-[#229ED9] px-4 py-1.5 rounded-full text-sm font-bold mb-6 shadow-sm">
+                      <Send className="w-4 h-4 fill-current" /> Telegram Integration
                    </div>
-                   <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4 leading-tight">
+                   <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6 leading-tight">
                      {t.telegramSection.title}
                    </h2>
-                   <p className="text-lg text-slate-600 mb-8 max-w-xl mx-auto md:mx-0">
+                   <p className="text-lg md:text-xl text-slate-600 mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">
                      {t.telegramSection.subtitle}
                    </p>
-                   <button className="bg-[#229ED9] hover:bg-[#1b8bc2] text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-blue-300 transition-all flex items-center justify-center gap-3 w-full md:w-auto group">
+                   <button className="bg-[#229ED9] hover:bg-[#1b8bc2] text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-lg shadow-blue-300/50 transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-3 w-full sm:w-auto mx-auto lg:mx-0 group">
                       <Send className="w-5 h-5 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
                       {t.telegramSection.button}
                    </button>
                  </div>
-                 <div className="flex-1 w-full max-w-md">
-                    <div className="relative">
-                       <div className="absolute inset-0 bg-[#229ED9] rounded-3xl blur-3xl opacity-20"></div>
-                       <div className="bg-white p-6 rounded-3xl shadow-xl border border-blue-100 relative">
-                          {/* Fake Telegram Chat UI */}
-                          <div className="space-y-4">
-                             <div className="flex items-end gap-3">
-                                <div className="w-8 h-8 rounded-full bg-[#229ED9] flex items-center justify-center text-white font-bold text-xs">Bot</div>
-                                <div className="bg-slate-100 rounded-2xl rounded-bl-none p-3 max-w-[80%] text-sm text-slate-700">
-                                   Assalomu alaykum! MedFlow Botiga xush kelibsiz. Qanday yordam bera olaman?
-                                </div>
-                             </div>
-                             <div className="flex items-end gap-3 flex-row-reverse">
-                                <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-xs">Siz</div>
-                                <div className="bg-[#229ED9] text-white rounded-2xl rounded-br-none p-3 max-w-[80%] text-sm">
-                                   Dr. Azimov qabuliga yozilmoqchiman.
-                                </div>
-                             </div>
-                             <div className="flex items-end gap-3">
-                                <div className="w-8 h-8 rounded-full bg-[#229ED9] flex items-center justify-center text-white font-bold text-xs">Bot</div>
-                                <div className="bg-slate-100 rounded-2xl rounded-bl-none p-3 max-w-[80%] text-sm text-slate-700">
-                                   Xo'p, Dr. Azimov 15-May kuni soat 14:00 da bo'sh. Band qilaymi?
-                                   <div className="mt-3 grid grid-cols-2 gap-2">
-                                      <button className="bg-white border border-slate-200 py-2 rounded-lg text-xs font-bold text-slate-700 shadow-sm">Ha, tasdiqlash</button>
-                                      <button className="bg-white border border-slate-200 py-2 rounded-lg text-xs font-bold text-slate-700 shadow-sm">Boshqa vaqt</button>
-                                   </div>
-                                </div>
-                             </div>
+
+                 {/* Visual/Phone Mockup */}
+                 <div className="flex-1 w-full max-w-md lg:max-w-lg">
+                    <div className="relative mx-auto">
+                       {/* Glow behind phone */}
+                       <div className="absolute inset-0 bg-[#229ED9] rounded-full blur-[60px] opacity-20 transform translate-y-10"></div>
+                       
+                       {/* Phone Frame */}
+                       <div className="bg-white p-4 rounded-[2.5rem] shadow-2xl border-8 border-white relative z-10">
+                          <div className="bg-slate-50 rounded-[2rem] overflow-hidden border border-slate-100 h-[500px] flex flex-col relative">
+                              {/* Telegram Header */}
+                              <div className="bg-[#229ED9] p-4 text-white flex items-center gap-3 shadow-md z-10">
+                                 <ArrowLeft className="w-5 h-5" />
+                                 <div className="flex-1">
+                                    <h4 className="font-bold text-sm">MedFlow Bot</h4>
+                                    <p className="text-[10px] opacity-80">bot</p>
+                                 </div>
+                                 <div className="w-8 h-8 bg-white/20 rounded-full"></div>
+                              </div>
+
+                              {/* Chat Area */}
+                              <div className="flex-1 p-4 space-y-4 overflow-hidden relative">
+                                 {/* Background Pattern */}
+                                 <div className="absolute inset-0 opacity-5 bg-[url('https://web.telegram.org/img/bg_0.png')] bg-repeat bg-[length:400px]"></div>
+
+                                 {/* Messages */}
+                                 <div className="flex items-end gap-2 relative z-10">
+                                    <div className="bg-white p-3 rounded-2xl rounded-bl-none shadow-sm max-w-[85%] text-sm text-slate-700">
+                                       <span className="font-bold text-[#229ED9] block text-xs mb-1">MedFlow Bot</span>
+                                       Assalomu alaykum! MedFlow Botiga xush kelibsiz.
+                                       <span className="block text-[10px] text-slate-400 text-right mt-1">14:00</span>
+                                    </div>
+                                 </div>
+
+                                 <div className="flex items-end gap-2 flex-row-reverse relative z-10">
+                                    <div className="bg-[#E3FCEF] p-3 rounded-2xl rounded-br-none shadow-sm max-w-[85%] text-sm text-slate-800">
+                                       📅 Dr. Azimov qabuliga yozilmoqchiman.
+                                       <span className="block text-[10px] text-green-700 text-right mt-1">14:01</span>
+                                    </div>
+                                 </div>
+
+                                 <div className="flex items-end gap-2 relative z-10">
+                                    <div className="bg-white p-3 rounded-2xl rounded-bl-none shadow-sm max-w-[85%] text-sm text-slate-700">
+                                       <span className="font-bold text-[#229ED9] block text-xs mb-1">MedFlow Bot</span>
+                                       Xo'p, Dr. Azimov <b>15-May</b> kuni soat <b>14:00</b> da bo'sh. Band qilaymi?
+                                       <div className="mt-3 grid grid-cols-1 gap-2">
+                                          <button className="bg-[#229ED9]/10 text-[#229ED9] py-2 rounded-lg text-xs font-bold hover:bg-[#229ED9]/20 transition-colors">Ha, tasdiqlash</button>
+                                       </div>
+                                       <span className="block text-[10px] text-slate-400 text-right mt-1">14:01</span>
+                                    </div>
+                                 </div>
+                              </div>
+
+                              {/* Input Area */}
+                              <div className="bg-white p-3 border-t border-slate-200 flex items-center gap-2 z-10">
+                                 <div className="w-8 h-8 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center">
+                                    <Plus className="w-5 h-5 rotate-45" />
+                                 </div>
+                                 <div className="flex-1 h-8 bg-slate-50 rounded-full"></div>
+                                 <div className="w-8 h-8 rounded-full text-[#229ED9] flex items-center justify-center">
+                                    <Send className="w-6 h-6" />
+                                 </div>
+                              </div>
                           </div>
                        </div>
                     </div>

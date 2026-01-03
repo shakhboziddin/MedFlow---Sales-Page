@@ -3,7 +3,7 @@ import {
   User, Stethoscope, BarChart3, Activity, 
   Calendar, FileText, Plus, Search, CheckCircle, Clock, 
   ChevronRight, X, UserPlus, Users, DollarSign, TrendingUp, Bell, ArrowLeft, Star,
-  Upload, Pill, FileImage, Play, CheckSquare, HeartPulse, Brain, Smile, Baby, ScanFace, ChevronLeft
+  Upload, Pill, FileImage, Play, CheckSquare, HeartPulse, Brain, Smile, Baby, ScanFace, ChevronLeft, MapPin
 } from 'lucide-react';
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar 
@@ -85,7 +85,7 @@ const Demo: React.FC<DemoProps> = ({ lang, activeRole, onRoleChange }) => {
             <div className="flex-1 bg-slate-50/50 relative overflow-x-hidden overflow-y-auto max-h-[800px]">
               {activeRole === 'doctor' && <DoctorView t={t} />}
               {activeRole === 'admin' && <AdminView t={t} />}
-              {activeRole === 'patient' && <PatientView t={t} />}
+              {activeRole === 'patient' && <PatientView t={t} lang={lang} />}
             </div>
           </div>
         </div>
@@ -577,7 +577,7 @@ const AdminView = ({ t }: { t: any }) => {
       <div className="bg-white p-4 md:p-6 rounded-2xl border border-slate-200 shadow-sm">
         <div className="flex justify-between items-center mb-6">
           <h4 className="font-bold text-slate-800 text-lg">{t.adminView.doctorsTitle}</h4>
-          <button className="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline">
+          <button className="text-sm font-medium text-blue-600 hover:text-blue-700 hover:text-blue-700 hover:underline">
             View All
           </button>
         </div>
@@ -639,14 +639,15 @@ const AdminView = ({ t }: { t: any }) => {
 };
 
 /* --- Patient Interactive View --- */
-const PatientView = ({ t }: { t: any }) => {
+const PatientView = ({ t, lang }: { t: any, lang: Language }) => {
   const [appointments, setAppointments] = useState<Appointment[]>([
     { id: 1, doctor: 'Dr. Azimov', specialty: 'Kardiolog', date: t.patientView.today, time: '14:30', status: 'upcoming' }
   ]);
   const [queuePos, setQueuePos] = useState(3);
+  const [notifyMe, setNotifyMe] = useState(false);
   
   // Booking Wizard State
-  // 0: Dashboard, 1: Select Specialty, 2: Select Doctor, 3: Select Date, 4: Select Time
+  // 0: Dashboard, 1: Select Specialty, 2: Select Doctor, 3: Select Date, 4: Select Time, 5: Confirm
   const [bookingStep, setBookingStep] = useState(0); 
   const [bookingData, setBookingData] = useState<{
     specialty: Specialty | null;
@@ -742,20 +743,35 @@ const PatientView = ({ t }: { t: any }) => {
               <Clock className="w-5 h-5 text-blue-600" />
               {t.patientView.status}
             </h3>
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                <div>
-                  <p className="text-sm text-slate-500 mb-1">{t.patientView.queuePosition}</p>
-                  <p className="text-4xl font-extrabold text-slate-900">{queuePos}</p>
-                </div>
-                <div className="text-left sm:text-right">
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
+               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                 <div>
+                   <p className="text-sm text-slate-500 mb-1">{t.patientView.queuePosition}</p>
+                   <p className="text-4xl font-extrabold text-slate-900">{queuePos}</p>
+                 </div>
+                 <div className="text-left sm:text-right">
                     <p className="text-sm text-slate-500 mb-1">{t.patientView.yourTurnIn}</p>
                     <p className="text-xl font-bold text-blue-600">~{queuePos * 15} {t.patientView.minutes}</p>
-                </div>
-              </div>
-              <div className="h-4 bg-slate-100 rounded-full overflow-hidden flex">
-                <div className={`h-full bg-blue-500 transition-all duration-1000 ease-out`} style={{width: `${100 - (queuePos * 10)}%`}}></div>
-              </div>
+                 </div>
+               </div>
+               
+               {/* Visual Queue Bar */}
+               <div className="h-4 bg-slate-100 rounded-full overflow-hidden flex mb-6">
+                 <div className={`h-full bg-blue-500 transition-all duration-1000 ease-out`} style={{width: `${100 - (queuePos * 10)}%`}}></div>
+               </div>
+
+               <div className="flex items-center justify-between border-t border-slate-100 pt-4">
+                 <div className="flex items-center gap-2 text-sm text-slate-600 font-medium">
+                   <Bell className={`w-4 h-4 ${notifyMe ? 'text-blue-500 fill-blue-500' : 'text-slate-400'}`} />
+                   {lang === 'uz' ? 'Meni ogohlantirish' : 'Уведомить меня'}
+                 </div>
+                 <button 
+                   onClick={() => setNotifyMe(!notifyMe)}
+                   className={`w-11 h-6 rounded-full transition-colors relative ${notifyMe ? 'bg-blue-600' : 'bg-slate-200'}`}
+                 >
+                   <span className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform ${notifyMe ? 'translate-x-5' : ''}`}></span>
+                 </button>
+               </div>
             </div>
           </div>
 
@@ -775,6 +791,9 @@ const PatientView = ({ t }: { t: any }) => {
                     <div className="flex-1">
                       <h4 className="font-bold text-slate-800 text-base md:text-lg">{appt.specialty}</h4>
                       <p className="text-sm text-slate-500 font-medium">{appt.doctor}</p>
+                      <span className="inline-block mt-1 text-[10px] font-bold uppercase tracking-wide bg-green-50 text-green-700 px-2 py-0.5 rounded-md">
+                        {appt.status === 'upcoming' ? (lang === 'uz' ? 'Tasdiqlangan' : 'Подтверждено') : 'Yakunlangan'}
+                      </span>
                     </div>
                     <div className="bg-green-100 text-green-700 p-2 rounded-full hidden sm:block">
                       <CheckCircle className="w-5 h-5" />
@@ -800,9 +819,10 @@ const PatientView = ({ t }: { t: any }) => {
                     {bookingStep === 2 && t.patientView.steps.doctor}
                     {bookingStep === 3 && t.patientView.steps.date}
                     {bookingStep === 4 && t.patientView.steps.time}
+                    {bookingStep === 5 && t.patientView.steps.confirm}
                  </h2>
                  <div className="flex gap-1 mt-1">
-                    {[1, 2, 3, 4].map(s => (
+                    {[1, 2, 3, 4, 5].map(s => (
                        <div key={s} className={`h-1.5 w-8 rounded-full transition-colors ${s <= bookingStep ? 'bg-blue-600' : 'bg-slate-200'}`}></div>
                     ))}
                  </div>
@@ -893,7 +913,7 @@ const PatientView = ({ t }: { t: any }) => {
                 </div>
               )}
 
-              {/* Step 4: Time & Confirm */}
+              {/* Step 4: Time */}
               {bookingStep === 4 && (
                  <div className="space-y-6">
                     <div className="bg-white p-6 rounded-2xl border border-slate-200">
@@ -904,17 +924,7 @@ const PatientView = ({ t }: { t: any }) => {
                                 key={time}
                                 onClick={() => {
                                    setBookingData({...bookingData, time: time});
-                                   // Auto confirm for demo purposes
-                                   const newAppt: Appointment = {
-                                      id: Date.now(),
-                                      doctor: bookingData.doctor!.name,
-                                      specialty: bookingData.doctor!.specialty,
-                                      date: bookingData.date!,
-                                      time: time,
-                                      status: 'upcoming'
-                                    };
-                                    setAppointments([...appointments, newAppt]);
-                                    resetBooking();
+                                   setBookingStep(5);
                                 }}
                                 className="py-2 px-1 rounded-lg border border-slate-200 text-sm font-medium hover:border-blue-500 hover:text-white hover:bg-blue-600 transition-all text-slate-600"
                              >
@@ -922,6 +932,49 @@ const PatientView = ({ t }: { t: any }) => {
                              </button>
                           ))}
                        </div>
+                    </div>
+                 </div>
+              )}
+
+               {/* Step 5: Confirmation */}
+               {bookingStep === 5 && (
+                 <div className="space-y-6">
+                    <div className="bg-white p-8 rounded-2xl border border-slate-200 text-center">
+                       <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 mx-auto mb-6">
+                          <CheckCircle className="w-8 h-8" />
+                       </div>
+                       <h3 className="text-xl font-bold text-slate-900 mb-2">
+                         {lang === 'uz' ? 'Qabulni tasdiqlaysizmi?' : 'Подтверждаете запись?'}
+                       </h3>
+                       <p className="text-slate-500 mb-8">
+                         {lang === 'uz' ? 'Quyidagi ma\'lumotlarni tekshiring' : 'Проверьте данные ниже'}
+                       </p>
+
+                       <div className="bg-slate-50 rounded-xl p-4 text-left space-y-3 mb-8">
+                          <div className="flex justify-between border-b border-slate-200 pb-2">
+                             <span className="text-slate-500 text-sm">Shifokor</span>
+                             <span className="font-bold text-slate-900">{bookingData.doctor?.name}</span>
+                          </div>
+                          <div className="flex justify-between border-b border-slate-200 pb-2">
+                             <span className="text-slate-500 text-sm">Mutaxassislik</span>
+                             <span className="font-bold text-slate-900">{bookingData.doctor?.specialty}</span>
+                          </div>
+                          <div className="flex justify-between border-b border-slate-200 pb-2">
+                             <span className="text-slate-500 text-sm">Sana</span>
+                             <span className="font-bold text-slate-900">{bookingData.date}</span>
+                          </div>
+                          <div className="flex justify-between">
+                             <span className="text-slate-500 text-sm">Vaqt</span>
+                             <span className="font-bold text-slate-900">{bookingData.time}</span>
+                          </div>
+                       </div>
+
+                       <button 
+                         onClick={confirmBooking}
+                         className="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200"
+                       >
+                         {t.common.confirm}
+                       </button>
                     </div>
                  </div>
               )}

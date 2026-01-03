@@ -43,7 +43,7 @@ export const TRANSLATIONS: Record<'uz' | 'ru', TranslationStructure> = {
     },
     telegramSection: {
       title: "Telegram Bot Integratsiyasi",
-      subtitle: "Bemor ilovasi Telegram bot orqali ham to'liq ishlaydi. Alohida ilova yuklab olish shart emas — barcha xizmatlar sevimli messenjeringizda.",
+      subtitle: "Bemor ilovasi Telegram bot orqali ham to'liq integratsiya qilingan. Ilovani yuklab olish shart emas — barcha xizmatlar (navbat, qabul, tarix) Telegram orqali boshqariladi.",
       button: "Telegram Botni Sinab Ko'rish"
     },
     demo: {
@@ -123,7 +123,7 @@ export const TRANSLATIONS: Record<'uz' | 'ru', TranslationStructure> = {
           doctor: "Shifokorni tanlang",
           date: "Kunni tanlang",
           time: "Vaqtni tanlang",
-          confirm: "Tasdiqlash"
+          confirm: "Ma'lumotlarni tasdiqlash"
         },
         noDoctors: "Bu mutaxassislik bo'yicha shifokorlar topilmadi."
       },
@@ -185,7 +185,7 @@ export const TRANSLATIONS: Record<'uz' | 'ru', TranslationStructure> = {
     },
     telegramSection: {
       title: "Интеграция с Telegram Ботом",
-      subtitle: "Приложение пациента полностью работает через Telegram бот. Не нужно скачивать отдельное приложение — все услуги в любимом мессенджере.",
+      subtitle: "Приложение пациента полностью интегрировано с Telegram. Не нужно скачивать приложение — управление очередью, записью и историей через бот.",
       button: "Попробовать Telegram Бот"
     },
     demo: {
